@@ -1,9 +1,17 @@
 var canvas = document.getElementById("nort");
 
-var Cycle = function(p, color) {
+var left = 0;
+var right = 180;
+var up = 90;
+var down = 270;
+
+var Cycle = function(p, image, color) {
+  this.image = image;
+  this.iRot = p.radians(right);
+  this.iYO = 8;
   this.color = color;
-  this.trailLen = 100;
-  this.velocity = new p.PVector(1, 0);
+  this.trailLen = 200;
+  this.velocity = new p.PVector(2, 0);
   this.pos = new p.PVector(
     p.floor(p.random(p.width)),
     p.floor(p.random(p.height)));
@@ -22,6 +30,12 @@ var Cycle = function(p, color) {
       p.vertex(v.x, v.y);
     }
     p.endShape();
+    var v = this.vertices[this.vertices.length-1];
+    p.pushMatrix();
+    p.translate(v.x, v.y);
+    p.rotate(this.iRot);
+    p.image(this.image, -15, -8);
+    p.popMatrix();
   };
 
   this.update = function() {
@@ -52,10 +66,15 @@ function proc(p) {
   p.size(window.innerWidth, window.innerHeight);
   p.background(0);
 
-  var blue = p.color(135, 255, 255);
-  var orange = p.color(255, 238, 0);
+  var blueImg = p.loadImage("blue.jpg");
+  var orangeImg = p.loadImage("orange.jpg");
+  var blue = p.color(36, 146, 255);
+  var orange = p.color(255, 219, 0);
 
-  var cycles = [new Cycle(p, blue), new Cycle(p, orange)];
+  var cycles = [
+    new Cycle(p, blueImg, blue), 
+    new Cycle(p, orangeImg, orange)
+  ];
 
   p.draw = function() {
     p.background(0);
